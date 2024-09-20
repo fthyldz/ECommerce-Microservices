@@ -7,5 +7,5 @@ namespace Ordering.ProductCreatedConsumer;
 public interface IOrderingApi
 {
     [Post("/products")]
-    Task CreateProduct([Body] IProductCreatedEvent request);
+    Task<bool> CreateProduct([Body] IProductCreatedEvent request);
 }

@@ -94,6 +94,9 @@ namespace Ordering.Persistence.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
                     b.HasKey("ProductId");
 
                     b.ToTable("Product");

@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
+using Catalog.Application.Behaviors;
 using Catalog.Application.Products;
+using FluentValidation;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,7 +14,11 @@ public static class ServiceRegistrar
         services.AddMediatR(config =>
         {
             config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            config.AddOpenBehavior(typeof(LoggingBehavior<,>));
+            config.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
+        
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         
         services.RegisterProductMappings();
         

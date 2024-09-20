@@ -11,7 +11,7 @@ public class GetAllProductsQueryHandler(IUnitOfWork unitOfWork) : IRequestHandle
 {
     public async Task<IEnumerable<ProductDto>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
-        var products = await unitOfWork.Products.GetAllProducts(cancellationToken);
+        var products = await unitOfWork.Products.GetAllProductsAsync(cancellationToken);
 
         var productDtos = products.Adapt<IEnumerable<ProductDto>>();
 

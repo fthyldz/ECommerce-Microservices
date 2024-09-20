@@ -47,6 +47,12 @@
       context: .
       dockerfile: src/Services/Catalog/Catalog.OrderCreatedConsumer/Dockerfile
 
+  ordering.stockupdatedconsumer:
+    image: ordering.stockupdatedconsumer
+    build:
+      context: .
+      dockerfile: src/Services/Ordering/Ordering.StockUpdatedConsumer/Dockerfile
+
 volumes:
   postgres_catalog_db:
   postgres_notifications_db:

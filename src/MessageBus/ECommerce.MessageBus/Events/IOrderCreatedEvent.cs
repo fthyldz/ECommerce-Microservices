@@ -1,6 +1,8 @@
+using ECommerce.MessageBus.Events.Common;
+
 namespace ECommerce.MessageBus.Events;
 
-public interface IOrderCreatedEvent
+public interface IOrderCreatedEvent : IIntegrationEvent
 {
     Guid OrderId { get; set; }
     string CustomerName { get; set; }

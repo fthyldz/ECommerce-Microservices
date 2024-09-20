@@ -4,7 +4,7 @@ using MediatR;
 namespace Catalog.Application.Stocks.Commands.DecreaseStock;
 
 
-public record DecreaseStockCommand(Guid ProductId, int Quantity) : IRequest<DecreaseStockCommandResult>;
+public record DecreaseStockCommand(Guid ProductId, int Quantity, Guid CorrelationId) : IRequest<DecreaseStockCommandResult>;
 
 public record DecreaseStockCommandResult(bool IsSuccess);
 
@@ -12,16 +12,16 @@ public class DecreaseStockHandlerCommandHandler(IUnitOfWork unitOfWork) : IReque
 {
     public async Task<DecreaseStockCommandResult> Handle(DecreaseStockCommand request, CancellationToken cancellationToken)
     {
-        var stock = await unitOfWork.Stocks.GetStockByProductId(request.ProductId, cancellationToken);
+        var product = await unitOfWork.Products.GetProductById(request.ProductId, cancellationToken);
         
-        if (stock is null)
+        if (product is null)
         {
-            return new DecreaseStockCommandResult(false);
+            throw new Exception($"Product with id {request.ProductId} not found");
         }
         
-        stock.DecreaseStock(request.Quantity);
+        product.DecreaseStock(request.Quantity, request.CorrelationId);
         
-        unitOfWork.Stocks.Update(stock);
+        unitOfWork.Products.Update(product);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
         

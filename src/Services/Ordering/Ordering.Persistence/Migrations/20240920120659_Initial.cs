@@ -33,6 +33,7 @@ namespace Ordering.Persistence.Migrations
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Price = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false),
                     Id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>

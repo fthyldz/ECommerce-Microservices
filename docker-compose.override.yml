@@ -90,6 +90,8 @@ services:
     restart: always
     depends_on:
       - messagebroker
+      - catalog.db
+      - ordering.db
       - catalog.api
       - ordering.api
 
@@ -98,6 +100,8 @@ services:
     restart: always
     depends_on:
       - messagebroker
+      - ordering.db
+      - notifications.db
       - ordering.api
       - notifications.api
 
@@ -106,5 +110,15 @@ services:
     restart: always
     depends_on:
       - messagebroker
+      - ordering.db
+      - catalog.db
       - ordering.api
       - catalog.api
+  
+  ordering.stockupdatedconsumer:
+    container_name: ordering.stockupdatedconsumer
+    restart: always
+    depends_on:
+      - messagebroker
+      - ordering.db
+      - ordering.api

@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
+using FluentValidation;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
+using Ordering.Application.Behaviors;
 
 namespace Ordering.Application;
 
@@ -11,7 +13,11 @@ public static class ServiceRegistrar
         services.AddMediatR(config =>
         {
             config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            config.AddOpenBehavior(typeof(LoggingBehavior<,>));
+            config.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
+        
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         
         services.AddMassTransit(factory =>
         {

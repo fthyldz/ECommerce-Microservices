@@ -10,6 +10,6 @@ public class StockRepository(CatalogDbContext context) : Repository<Stock>(conte
 {
     public async Task<Stock?> GetStockByProductId(Guid productId, CancellationToken cancellationToken)
     {
-        return await context.Stocks.FirstOrDefaultAsync(x => x.ProductId == productId, cancellationToken);
+        return await _dbSet.FirstOrDefaultAsync(x => x.ProductId == productId, cancellationToken);
     }
 }

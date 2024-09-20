@@ -1,5 +1,6 @@
 using MediatR;
 using Ordering.Application.Abstractions.Persistence.Common;
+using Ordering.Application.Exceptions;
 using Ordering.Application.Orders.Dtos;
 using Ordering.Domain.Entities;
 
@@ -7,7 +8,7 @@ namespace Ordering.Application.Orders.Commands.CreateOrder;
 
 public record CreateOrderCommand(OrderDto OrderDto) : IRequest<CreateOrderCommandResult>;
 
-public record CreateOrderCommandResult(Guid Id);
+public record CreateOrderCommandResult(bool IsSuccess);
 
 public class CreateOrderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateOrderCommand, CreateOrderCommandResult>
 {
@@ -17,13 +18,21 @@ public class CreateOrderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler
         
         unitOfWork.Orders.Add(order);
         
+        var products = await unitOfWork.Products.GetProductByIdsAsync(command.OrderDto.OrderItems.Select(x => x.ProductId).ToArray(), cancellationToken);
+        
         foreach (var orderItemDto in command.OrderDto.OrderItems)
         {
+            var product = products.FirstOrDefault(x => x.ProductId == orderItemDto.ProductId);
+            if (product is null)
+                throw new NotFoundException("Product", orderItemDto.ProductId);
+            if ((product.Quantity - orderItemDto.Quantity) < 0)
+                throw new Exception($"Product with id {orderItemDto.ProductId} does not have enough quantity.");
+            
             order.AddOrderItem(Guid.NewGuid(), order.Id, orderItemDto.ProductId, orderItemDto.Quantity, orderItemDto.Price);
         }
         
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return new CreateOrderCommandResult(order.Id);
+        return new CreateOrderCommandResult(true);
     }
 }

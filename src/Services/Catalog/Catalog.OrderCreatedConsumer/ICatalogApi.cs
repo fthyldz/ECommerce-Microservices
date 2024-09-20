@@ -7,5 +7,5 @@ namespace Catalog.OrderCreatedConsumer;
 public interface ICatalogApi
 {
     [Put("/stocks/decrease")]
-    Task DecreaseStock([Body] DecreaseStockRequestDto request);
+    Task<bool> DecreaseStock([Body] DecreaseStockRequestDto request);
 }

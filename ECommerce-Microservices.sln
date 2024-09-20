@@ -48,6 +48,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notifications.OrderCreatedC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.OrderCreatedConsumer", "src\Services\Catalog\Catalog.OrderCreatedConsumer\Catalog.OrderCreatedConsumer.csproj", "{A2689790-2347-4134-8AF1-3B140EC67612}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.StockUpdatedConsumer", "src\Services\Ordering\Ordering.StockUpdatedConsumer\Ordering.StockUpdatedConsumer.csproj", "{8E727A6D-9E17-4449-BAA9-2ACA1DE51004}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,7 @@ Global
 		{98075A6B-D60F-455F-8F2C-61AF616798EA} = {856E68E9-92B7-454F-93C4-310A0862ADCC}
 		{0AB6CE36-6581-4CD1-8D24-81294A76D911} = {38DCC1B4-518A-4F83-993B-4B1DFA81D3ED}
 		{A2689790-2347-4134-8AF1-3B140EC67612} = {4A1336CF-AA1B-4B01-9D17-344F028800F3}
+		{8E727A6D-9E17-4449-BAA9-2ACA1DE51004} = {E7C51D6A-84C3-41A1-8B0A-DF8286498E74}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C2576472-8459-4DC4-83C5-1B4B16D42424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -136,5 +139,9 @@ Global
 		{A2689790-2347-4134-8AF1-3B140EC67612}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2689790-2347-4134-8AF1-3B140EC67612}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2689790-2347-4134-8AF1-3B140EC67612}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E727A6D-9E17-4449-BAA9-2ACA1DE51004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E727A6D-9E17-4449-BAA9-2ACA1DE51004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E727A6D-9E17-4449-BAA9-2ACA1DE51004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E727A6D-9E17-4449-BAA9-2ACA1DE51004}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

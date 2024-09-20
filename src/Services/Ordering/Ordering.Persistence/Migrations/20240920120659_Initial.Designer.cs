@@ -12,7 +12,7 @@ using Ordering.Persistence.Contexts;
 namespace Ordering.Persistence.Migrations
 {
     [DbContext(typeof(OrderingDbContext))]
-    [Migration("20240920003537_Initial")]
+    [Migration("20240920120659_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -96,6 +96,9 @@ namespace Ordering.Persistence.Migrations
                     b.Property<decimal>("Price")
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
 
                     b.HasKey("ProductId");
 

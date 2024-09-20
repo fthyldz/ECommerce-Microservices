@@ -8,7 +8,7 @@ namespace Catalog.Persistence.Common;
 
 public class Repository<TEntity>(CatalogDbContext context) : IRepository<TEntity> where TEntity : BaseEntity
 {
-    private readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
+    protected readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
 
     public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>>? expression = null)
     {

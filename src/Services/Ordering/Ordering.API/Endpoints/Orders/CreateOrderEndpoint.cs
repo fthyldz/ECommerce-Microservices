@@ -14,7 +14,7 @@ public class CreateOrderEndpoint : ICarterModule
         {
             var command = new CreateOrderCommand(request);
             var result = await mediator.Send(command, cancellationToken);
-            return Results.Ok(result);
+            return Results.Ok(result.IsSuccess);
         });
     }
 }

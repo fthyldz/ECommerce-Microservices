@@ -10,7 +10,7 @@ public class CreateEndpoint : ICarterModule
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapPost("/notifications",
-            async ([FromBody] NotificationDto notificationDto, INotificationService notificationService, CancellationToken cancellationToken = default) =>
+            async ([FromBody] CreateNotificationDto notificationDto, INotificationService notificationService, CancellationToken cancellationToken = default) =>
             {
                 var notification = await notificationService.AddAsync(notificationDto, cancellationToken);
 

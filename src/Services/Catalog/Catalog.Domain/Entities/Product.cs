@@ -32,4 +32,11 @@ public class Product : Aggregate
 
         return product;
     }
+    
+    public void DecreaseStock(int quantity, Guid correlationId)
+    {
+        Stock.DecreaseStock(quantity);
+        
+        AddDomainEvent(new StockUpdatedDomainEvent(Id, Stock.Quantity, correlationId));
+    }
 }

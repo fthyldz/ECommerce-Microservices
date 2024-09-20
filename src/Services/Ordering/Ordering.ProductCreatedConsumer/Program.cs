@@ -1,10 +1,13 @@
 using ECommerce.MessageBus;
 using MassTransit;
 using Ordering.ProductCreatedConsumer;
+using Ordering.ProductCreatedConsumer.Extensions;
 using Refit;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHostedService<Worker>();
+
+builder.Services.AddPollyResilience();
 
 builder.Services.AddMassTransit(factory =>
 {
@@ -23,6 +26,11 @@ builder.Services.AddMassTransit(factory =>
         cfg.ReceiveEndpoint(RabbitMqConstants.OrderingServiceQueue, e =>
         {
             e.Consumer<ProductCreatedEventConsumer>(context);
+            
+            e.UseMessageRetry(config =>
+            {
+                config.Interval(5, TimeSpan.FromSeconds(10));
+            });
         });
     });
 });

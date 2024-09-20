@@ -1,10 +1,13 @@
 using ECommerce.MessageBus;
 using MassTransit;
 using Notifications.OrderCreatedConsumer;
+using Notifications.OrderCreatedConsumer.Extensions;
 using Refit;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHostedService<Worker>();
+
+builder.Services.AddPollyResilience();
 
 builder.Services.AddMassTransit(factory =>
 {
@@ -23,6 +26,11 @@ builder.Services.AddMassTransit(factory =>
         cfg.ReceiveEndpoint(RabbitMqConstants.NotificationsServiceQueue, e =>
         {
             e.Consumer<OrderCreatedEventConsumer>(context);
+            
+            e.UseMessageRetry(config =>
+            {
+                config.Interval(5, TimeSpan.FromSeconds(10));
+            });
         });
     });
 });

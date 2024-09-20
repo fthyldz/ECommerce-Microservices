@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Endpoints.Stocks;
 
-public record DecreaseStockRequest(Guid ProductId, int Quantity);
+public record DecreaseStockRequest(Guid ProductId, int Quantity, Guid CorrelationId);
 
 public class DecreaseStockEndpoint : ICarterModule
 {
@@ -15,10 +15,9 @@ public class DecreaseStockEndpoint : ICarterModule
         app.MapPut("stocks/decrease", async ([FromBody] DecreaseStockRequest request, IMediator mediator, CancellationToken cancellationToken = default) =>
         {
             var command = request.Adapt<DecreaseStockCommand>();
-            
             var result = await mediator.Send(command, cancellationToken);
             
-            return Results.Ok(result);
+            return Results.Ok(result.IsSuccess);
         });
     }
 }

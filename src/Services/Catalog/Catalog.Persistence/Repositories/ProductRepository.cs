@@ -10,6 +10,11 @@ public class ProductRepository(CatalogDbContext context) : Repository<Product>(c
 {
     public async Task<IEnumerable<Product>> GetAllProducts(CancellationToken cancellationToken = default)
     {
-        return await Find().Include(x => x.Stock).ToListAsync(cancellationToken);
+        return await _dbSet.Include(x => x.Stock).ToListAsync(cancellationToken);
+    }
+    
+    public async Task<Product?> GetProductById(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet.Where(x => x.Id == id).Include(x => x.Stock).FirstOrDefaultAsync(cancellationToken);
     }
 }

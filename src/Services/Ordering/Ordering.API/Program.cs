@@ -1,4 +1,5 @@
 using Carter;
+using Ordering.API.Middlewares.ExceptionHandlers;
 using Ordering.Application;
 using Ordering.Persistence;
 using Ordering.Persistence.Extensions;
@@ -9,6 +10,8 @@ builder.Services
     .AddOrderingApplication()
     .AddOrderingPersistence(builder.Configuration)
     .AddCarter();
+
+builder.Services.AddExceptionHandlers();
 
 var app = builder.Build();
 

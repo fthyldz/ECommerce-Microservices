@@ -1,0 +1,53 @@
+﻿services:
+  messagebroker:
+    image: rabbitmq:management
+    
+  catalog.db:
+    image: postgres
+  
+  catalog.api:
+    image: catalog.api
+    build:
+      context: .
+      dockerfile: src/Services/Catalog/Catalog.API/Dockerfile
+
+  notifications.db:
+    image: postgres
+
+  notifications.api:
+    image: notifications.api
+    build:
+      context: .
+      dockerfile: src/Services/Notifications/Notifications.API/Dockerfile
+      
+  ordering.db:
+    image: postgres
+  
+  ordering.api:
+    image: ordering.api
+    build:
+      context: .
+      dockerfile: src/Services/Ordering/Ordering.API/Dockerfile
+
+  ordering.productcreatedconsumer:
+    image: ordering.productcreatedconsumer
+    build:
+      context: .
+      dockerfile: src/Services/Ordering/Ordering.ProductCreatedConsumer/Dockerfile
+
+  notifications.ordercreatedconsumer:
+    image: notifications.ordercreatedconsumer
+    build:
+      context: .
+      dockerfile: src/Services/Notifications/Notifications.OrderCreatedConsumer/Dockerfile
+
+  catalog.ordercreatedconsumer:
+    image: catalog.ordercreatedconsumer
+    build:
+      context: .
+      dockerfile: src/Services/Catalog/Catalog.OrderCreatedConsumer/Dockerfile
+
+volumes:
+  postgres_catalog_db:
+  postgres_notifications_db:
+  postgres_ordering_db:

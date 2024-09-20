@@ -1,0 +1,110 @@
+services:
+  messagebroker:
+    container_name: messagebroker
+    hostname: ecommerce-mq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  catalog.db:
+    container_name: catalog.db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=CatalogDb
+    restart: always
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_catalog_db:/var/lib/postgresql/data
+
+  catalog.api:
+    container_name: catalog.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ConnectionStrings__CatalogDbConnection=Server=catalog.db;Port=5432;Database=CatalogDb;User Id=postgres;Password=postgres;Include Error Detail=true
+    restart: always
+    depends_on:
+      - catalog.db
+      - messagebroker
+    ports:
+      - "5012:8080"
+
+  notifications.db:
+    container_name: notifications.db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=NotificationsDb
+    restart: always
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_notifications_db:/var/lib/postgresql/data
+
+  notifications.api:
+    container_name: notifications.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ConnectionStrings__NotificationsDbConnection=Server=notifications.db;Port=5432;Database=NotificationsDb;User Id=postgres;Password=postgres;Include Error Detail=true
+    restart: always
+    depends_on:
+      - notifications.db
+      - messagebroker
+    ports:
+      - "5013:8080"
+
+  ordering.db:
+    container_name: ordering.db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=OrderingDb
+    restart: always
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_ordering_db:/var/lib/postgresql/data
+
+  ordering.api:
+    container_name: ordering.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ConnectionStrings__OrderingDbConnection=Server=ordering.db;Port=5432;Database=OrderingDb;User Id=postgres;Password=postgres;Include Error Detail=true
+    restart: always
+    depends_on:
+      - ordering.db
+      - messagebroker
+    ports:
+      - "5014:8080"
+  
+  ordering.productcreatedconsumer:
+    container_name: ordering.productcreatedconsumer
+    restart: always
+    depends_on:
+      - messagebroker
+      - catalog.api
+      - ordering.api
+
+  notifications.ordercreatedconsumer:
+    container_name: notifications.ordercreatedconsumer
+    restart: always
+    depends_on:
+      - messagebroker
+      - ordering.api
+      - notifications.api
+
+  catalog.ordercreatedconsumer:
+    container_name: catalog.ordercreatedconsumer
+    restart: always
+    depends_on:
+      - messagebroker
+      - ordering.api
+      - catalog.api

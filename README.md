@@ -11,7 +11,6 @@ Bu proje, RabbitMQ ve PostgreSQL kullanarak .NET Core ile geliştirilmiş bir e-
 - [Kurulum](#kurulum)
   - [Docker](#docker)
   - [Projeyi Çalıştırma](#projeyi-çalıştırma)
-- [Kullanılan Teknolojiler](#kullanılan-teknolojiler)
 
 ## Proje Tanımı
 

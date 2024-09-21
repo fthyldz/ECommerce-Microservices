@@ -1,6 +1,7 @@
-using Catalog.Domain.Events.DomainEvents;
-using ECommerce.MessageBus.Events;
-using ECommerce.MessageBus.Models;
+using Catalog.Domain.Events;
+using ECommerce.Domain.Primitives;
+using ECommerce.MessageContracts.Events;
+using ECommerce.MessageContracts.Models;
 using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -13,10 +14,11 @@ public class StockUpdatedEventHandler(
 {
     public async Task Handle(StockUpdatedDomainEvent domainEvent, CancellationToken cancellationToken)
     {
+        IDomainEvent eventInfo = domainEvent;
         logger.LogInformation("[START] Handle Request={Request} - CorrelationId={CorrelationId} - RequestData={RequestData}",
-            nameof(StockUpdatedDomainEvent), domainEvent.EventId, domainEvent);
+            nameof(StockUpdatedDomainEvent), eventInfo.EventId, domainEvent);
         
-        var stockUpdatedEvent = new StockUpdated { CorrelationId = domainEvent.EventId, ProductId = domainEvent.ProductId, Quantity = domainEvent.Quantity };
+        var stockUpdatedEvent = new StockUpdatedEvent { CorrelationId = eventInfo.EventId, ProductId = domainEvent.ProductId, Quantity = domainEvent.Quantity };
         await publishEndpoint.Publish<IStockUpdatedEvent>(stockUpdatedEvent, cancellationToken);
         
         logger.LogInformation("[END] Handled {Request}", nameof(StockUpdatedDomainEvent));

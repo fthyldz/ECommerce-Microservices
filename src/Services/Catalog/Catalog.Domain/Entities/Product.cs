@@ -1,5 +1,5 @@
-using Catalog.Domain.Events.DomainEvents;
-using Catalog.Domain.Primitives;
+using Catalog.Domain.Events;
+using ECommerce.Domain.Primitives;
 
 namespace Catalog.Domain.Entities;
 
@@ -33,10 +33,10 @@ public class Product : Aggregate
         return product;
     }
     
-    public void DecreaseStock(int quantity, Guid correlationId)
+    public void DecreaseStock(int quantity)
     {
         Stock.DecreaseStock(quantity);
         
-        AddDomainEvent(new StockUpdatedDomainEvent(Id, Stock.Quantity, correlationId));
+        AddDomainEvent(new StockUpdatedDomainEvent(Id, Stock.Quantity));
     }
 }

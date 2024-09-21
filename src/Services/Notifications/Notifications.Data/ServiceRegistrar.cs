@@ -20,6 +20,8 @@ public static class ServiceRegistrar
         
         services.AddScoped<INotificationRepository, NotificationRepository>();
         
+        services.AddScoped<INotificationsUnitOfWork, NotificationsUnitOfWork>();
+
         return services;
     }
 }

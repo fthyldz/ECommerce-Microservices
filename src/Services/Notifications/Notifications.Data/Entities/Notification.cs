@@ -1,5 +1,5 @@
 using Notifications.Data.Enums;
-using Notifications.Data.Primitives;
+using ECommerce.Domain.Primitives;
 
 namespace Notifications.Data.Entities;
 

@@ -7,7 +7,7 @@ namespace Catalog.Application.Products.Queries.GetAllProducts;
 
 public record GetAllProductsQuery : IRequest<IEnumerable<ProductDto>>;
 
-public class GetAllProductsQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllProductsQuery, IEnumerable<ProductDto>>
+public class GetAllProductsQueryHandler(ICatalogUnitOfWork unitOfWork) : IRequestHandler<GetAllProductsQuery, IEnumerable<ProductDto>>
 {
     public async Task<IEnumerable<ProductDto>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {

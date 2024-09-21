@@ -1,5 +1,5 @@
 using Notifications.Data.Entities;
-using Notifications.Data.Repositories.Abstractions.Common;
+using ECommerce.Application.Abstractions.Persistence.Common;
 
 namespace Notifications.Data.Repositories.Abstractions;
 

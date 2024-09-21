@@ -8,12 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\ECommerce.API\ECommerce.API.csproj" />
+      <ProjectReference Include="..\..\..\Common\ECommerce.Infrastructure\ECommerce.Infrastructure.csproj" />
       <ProjectReference Include="..\Notifications.Business\Notifications.Business.csproj" />
       <ProjectReference Include="..\Notifications.Data\Notifications.Data.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Carter" Version="8.1.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

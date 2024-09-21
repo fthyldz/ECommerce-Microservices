@@ -1,38 +1,40 @@
-using ECommerce.MessageBus.Events;
-using ECommerce.MessageBus.Models;
+using ECommerce.Application.Abstractions.Api.Common;
+using ECommerce.Domain.Primitives;
+using ECommerce.MessageContracts.Events;
+using ECommerce.MessageContracts.Models;
 using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Ordering.Domain.Events.DomainEvents;
+using Ordering.Domain.Events;
 
 namespace Ordering.Application.Orders.EventHandlers;
 
 public class OrderCreatedEventHandler(
-    IPublishEndpoint publishEndpoint, ILogger<OrderCreatedEventHandler> logger)
-    : INotificationHandler<OrderCreatedEvent>
+    IPublishEndpoint publishEndpoint, ILogger<OrderCreatedEventHandler> logger, ICorrelationIdService correlationIdService)
+    : INotificationHandler<OrderCreatedDomainEvent>
 {
-    public async Task Handle(OrderCreatedEvent domainEvent, CancellationToken cancellationToken)
+    public async Task Handle(OrderCreatedDomainEvent domainEvent, CancellationToken cancellationToken)
     {
-        logger.LogInformation("[START] Handle Request={Request} - RequestData={RequestData}",
-            nameof(OrderCreatedEvent), domainEvent);
-        
-        var orderCreatedEvent = new OrderCreated
-        {
-            CorrelationId = domainEvent.EventId,
-            OrderId = domainEvent.Order.Id,
-            CustomerName = domainEvent.Order.CustomerName,
-            Address = domainEvent.Order.Address,
-            OrderItems = domainEvent.Order.OrderItems.Select(IOrderCreatedItem (orderItem) => new OrderCreatedItem
+        IDomainEvent eventInfo = domainEvent;
+        var correlationId = correlationIdService.GetCorrelationId();
+
+        logger.LogInformation("[START] Handling domain event: {DomainEvent} - CorrelationId: {CorrelationId} - DomainEventId: {DomainEventId} - EventData: {@EventData}", nameof(OrderCreatedDomainEvent), correlationId, eventInfo.EventId, domainEvent);
+
+        var orderCreatedEvent = OrderCreatedEvent.Create(
+            correlationId,
+            eventInfo.EventId,
+            domainEvent.Order.Id,
+            domainEvent.Order.CustomerName,
+            domainEvent.Order.Address,
+            domainEvent.Order.OrderItems.Select(IOrderCreatedItem (orderItem) => new OrderCreatedItem
             {
                 ProductId = orderItem.ProductId,
                 Quantity = orderItem.Quantity,
                 Price = orderItem.Price
-            }).ToList()
-        };
-        await publishEndpoint.Publish<IOrderCreatedEvent>(orderCreatedEvent, cancellationToken);
+            }).ToList());
         
-        logger.LogInformation("{Event} fırlatıldı. CorrelationId: {CorrelationId}", nameof(OrderCreatedEvent), orderCreatedEvent.CorrelationId);
+        await publishEndpoint.Publish(orderCreatedEvent, cancellationToken);
         
-        logger.LogInformation("[END] Handled {Request}", nameof(OrderCreatedEvent));
+        logger.LogInformation("[END] Handled domain event: {DomainEvent} - CorrelationId: {CorrelationId} - DomainEventId: {DomainEventId}", nameof(OrderCreatedDomainEvent), correlationId, eventInfo.EventId);
     }
 }

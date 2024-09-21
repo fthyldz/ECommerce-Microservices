@@ -1,4 +1,4 @@
-using Ordering.Domain.Primitives;
+using ECommerce.Domain.Primitives;
 
 namespace Ordering.Domain.Entities;
 

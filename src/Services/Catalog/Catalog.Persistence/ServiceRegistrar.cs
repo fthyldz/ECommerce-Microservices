@@ -2,8 +2,8 @@
 using Catalog.Application.Abstractions.Persistence.Repositories;
 using Catalog.Persistence.Common;
 using Catalog.Persistence.Contexts;
-using Catalog.Persistence.Interceptors;
 using Catalog.Persistence.Repositories;
+using ECommerce.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -17,18 +17,18 @@ public static class ServiceRegistrar
     {
         var connectionString = configuration.GetConnectionString("CatalogDbConnection");
         
-        services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
-        
+        services.AddECommercePersistence<CatalogDbContext>();
+
         services.AddDbContext<CatalogDbContext>((serviceProvider, options) =>
         {
             options.AddInterceptors(serviceProvider.GetService<ISaveChangesInterceptor>()!);
             options.UseNpgsql(connectionString);
         });
-
+        
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IStockRepository, StockRepository>();
 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<ICatalogUnitOfWork, CatalogUnitOfWork>();
         
         return services;
     }

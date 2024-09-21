@@ -1,10 +1,10 @@
 using Notifications.Data.Contexts;
 using Notifications.Data.Entities;
+using ECommerce.Persistence.Common;
 using Notifications.Data.Repositories.Abstractions;
-using Notifications.Data.Repositories.Common;
 
 namespace Notifications.Data.Repositories;
 
-public class NotificationRepository(NotificationsDbContext context) : Repository<Notification>(context), INotificationRepository
+public class NotificationRepository(NotificationsDbContext context) : Repository<NotificationsDbContext, Notification>(context), INotificationRepository
 {
 }

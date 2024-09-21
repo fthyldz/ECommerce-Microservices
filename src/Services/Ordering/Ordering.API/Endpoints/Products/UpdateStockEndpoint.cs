@@ -10,11 +10,15 @@ public class UpdateStockEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPut("/products", async ([FromBody] StockUpdateDto request, IMediator mediator, CancellationToken cancellationToken = default) =>
+        app.MapPut("/products", async ([FromBody] UpdateStockDto request, IMediator mediator, HttpContext context, ILogger<UpdateStockEndpoint> logger, CancellationToken cancellationToken = default) =>
         {
-            var response = await mediator.Send(new UpdateStockCommand(request), cancellationToken);
+            logger.LogInformation("[REQUEST] CorrelationId: {CorrelationId}, Request: {@Request}", context.TraceIdentifier, request);
             
-            return Results.Ok(response.IsSuccess);
+            var result = await mediator.Send(new UpdateStockCommand(request), cancellationToken);
+
+            logger.LogInformation("[RESPONSE] CorrelationId: {CorrelationId}, Response: {@Response}", context.TraceIdentifier, result);
+            
+            return Results.Ok(result.IsSuccess);
         });
     }
 }

@@ -8,7 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Carter" Version="8.1.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -16,6 +15,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\ECommerce.API\ECommerce.API.csproj" />
+      <ProjectReference Include="..\..\..\Common\ECommerce.Infrastructure\ECommerce.Infrastructure.csproj" />
       <ProjectReference Include="..\Catalog.Application\Catalog.Application.csproj" />
       <ProjectReference Include="..\Catalog.Persistence\Catalog.Persistence.csproj" />
     </ItemGroup>

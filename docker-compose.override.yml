@@ -10,6 +10,17 @@ services:
       - "5672:5672"
       - "15672:15672"
 
+  seq:
+    container_name: seq
+    environment:
+      - ACCEPT_EULA=Y
+    restart: always
+    ports:
+      - '80:80'
+      - '5341:5341'
+    volumes:
+      - seq_data:/data
+
   catalog.db:
     container_name: catalog.db
     environment:
@@ -28,10 +39,17 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ConnectionStrings__CatalogDbConnection=Server=catalog.db;Port=5432;Database=CatalogDb;User Id=postgres;Password=postgres;Include Error Detail=true
+      - RabbitMq__HostName=ecommerce-mq
+      - RabbitMq__Port=5672
+      - RabbitMq__UserName=guest
+      - RabbitMq__Password=guest
+      - RabbitMq__VirtualHost=/
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
     restart: always
     depends_on:
       - catalog.db
       - messagebroker
+      - seq
     ports:
       - "5012:8080"
 
@@ -53,10 +71,11 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ConnectionStrings__NotificationsDbConnection=Server=notifications.db;Port=5432;Database=NotificationsDb;User Id=postgres;Password=postgres;Include Error Detail=true
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
     restart: always
     depends_on:
       - notifications.db
-      - messagebroker
+      - seq
     ports:
       - "5013:8080"
 
@@ -78,47 +97,79 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ConnectionStrings__OrderingDbConnection=Server=ordering.db;Port=5432;Database=OrderingDb;User Id=postgres;Password=postgres;Include Error Detail=true
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
     restart: always
     depends_on:
       - ordering.db
       - messagebroker
+      - seq
     ports:
       - "5014:8080"
   
-  ordering.productcreatedconsumer:
-    container_name: ordering.productcreatedconsumer
+  ordering.productcreatedeventconsumer:
+    container_name: ordering.productcreatedeventconsumer
+    environment:
+      - RabbitMq__HostName=ecommerce-mq
+      - RabbitMq__Port=5672
+      - RabbitMq__UserName=guest
+      - RabbitMq__Password=guest
+      - RabbitMq__VirtualHost=/
+      - RabbitMq__QueueName=catalog.ordering.product_created_queue
+      - OrderingApi__Url=http://ordering.api:8080
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
     restart: always
     depends_on:
       - messagebroker
-      - catalog.db
-      - ordering.db
-      - catalog.api
       - ordering.api
+      - seq
 
-  notifications.ordercreatedconsumer:
-    container_name: notifications.ordercreatedconsumer
+  notifications.ordercreatedeventconsumer:
+    container_name: notifications.ordercreatedeventconsumer
+    environment:
+      - RabbitMq__HostName=ecommerce-mq
+      - RabbitMq__Port=5672
+      - RabbitMq__UserName=guest
+      - RabbitMq__Password=guest
+      - RabbitMq__VirtualHost=/
+      - RabbitMq__QueueName=ordering.notifications.order_created_queue
+      - NotificationsApi__Url=http://notifications.api:8080
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
     restart: always
     depends_on:
       - messagebroker
-      - ordering.db
-      - notifications.db
-      - ordering.api
       - notifications.api
+      - seq
 
-  catalog.ordercreatedconsumer:
-    container_name: catalog.ordercreatedconsumer
+  catalog.ordercreatedeventconsumer:
+    container_name: catalog.ordercreatedeventconsumer
+    environment:
+      - RabbitMq__HostName=ecommerce-mq
+      - RabbitMq__Port=5672
+      - RabbitMq__UserName=guest
+      - RabbitMq__Password=guest
+      - RabbitMq__VirtualHost=/
+      - RabbitMq__QueueName=ordering.catalog.order_created_queue
+      - CatalogApi__Url=http://catalog.api:8080
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
     restart: always
     depends_on:
       - messagebroker
-      - ordering.db
-      - catalog.db
-      - ordering.api
       - catalog.api
+      - seq
   
-  ordering.stockupdatedconsumer:
-    container_name: ordering.stockupdatedconsumer
+  ordering.stockupdatedeventconsumer:
+    container_name: ordering.stockupdatedeventconsumer
+    environment:
+      - RabbitMq__HostName=ecommerce-mq
+      - RabbitMq__Port=5672
+      - RabbitMq__UserName=guest
+      - RabbitMq__Password=guest
+      - RabbitMq__VirtualHost=/
+      - RabbitMq__QueueName=catalog.ordering.stock_updated_queue
+      - OrderingApi__Url=http://ordering.api:8080
+      - Serilog__WriteTo__1__Args__serverUrl=http://seq:5341
     restart: always
     depends_on:
       - messagebroker
-      - ordering.db
       - ordering.api
+      - seq

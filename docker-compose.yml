@@ -1,6 +1,9 @@
 ﻿services:
   messagebroker:
     image: rabbitmq:management
+  
+  seq:
+    image: datalust/seq:latest
     
   catalog.db:
     image: postgres
@@ -29,31 +32,32 @@
       context: .
       dockerfile: src/Services/Ordering/Ordering.API/Dockerfile
 
-  ordering.productcreatedconsumer:
-    image: ordering.productcreatedconsumer
+  ordering.productcreatedeventconsumer:
+    image: ordering.productcreatedeventconsumer
     build:
       context: .
-      dockerfile: src/Services/Ordering/Ordering.ProductCreatedConsumer/Dockerfile
+      dockerfile: src/Services/Ordering/Consumers/Ordering.ProductCreatedEventConsumer/Dockerfile
 
-  notifications.ordercreatedconsumer:
-    image: notifications.ordercreatedconsumer
+  notifications.ordercreatedeventconsumer:
+    image: notifications.ordercreatedeventconsumer
     build:
       context: .
-      dockerfile: src/Services/Notifications/Notifications.OrderCreatedConsumer/Dockerfile
+      dockerfile: src/Services/Notifications/Consumers/Notifications.OrderCreatedEventConsumer/Dockerfile
 
-  catalog.ordercreatedconsumer:
-    image: catalog.ordercreatedconsumer
+  catalog.ordercreatedeventconsumer:
+    image: catalog.ordercreatedeventconsumer
     build:
       context: .
-      dockerfile: src/Services/Catalog/Catalog.OrderCreatedConsumer/Dockerfile
+      dockerfile: src/Services/Catalog/Consumers/Catalog.OrderCreatedEventConsumer/Dockerfile
 
-  ordering.stockupdatedconsumer:
-    image: ordering.stockupdatedconsumer
+  ordering.stockupdatedeventconsumer:
+    image: ordering.stockupdatedeventconsumer
     build:
       context: .
-      dockerfile: src/Services/Ordering/Ordering.StockUpdatedConsumer/Dockerfile
+      dockerfile: src/Services/Ordering/Consumers/Ordering.StockUpdatedEventConsumer/Dockerfile
 
 volumes:
   postgres_catalog_db:
   postgres_notifications_db:
   postgres_ordering_db:
+  seq_data:

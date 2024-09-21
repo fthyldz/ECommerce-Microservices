@@ -10,8 +10,4 @@
       <ProjectReference Include="..\Notifications.Data\Notifications.Data.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Mapster" Version="7.4.0" />
-    </ItemGroup>
-
 </Project>

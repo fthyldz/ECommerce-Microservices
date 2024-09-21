@@ -6,17 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Endpoints.Stocks;
 
-public record DecreaseStockRequest(Guid ProductId, int Quantity, Guid CorrelationId);
-
 public class DecreaseStockEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPut("stocks/decrease", async ([FromBody] DecreaseStockRequest request, IMediator mediator, CancellationToken cancellationToken = default) =>
+        app.MapPut("stocks/decrease", async ([FromBody] DecreaseStockRequestDto request, IMediator mediator, HttpContext context, ILogger<DecreaseStockEndpoint> logger, CancellationToken cancellationToken = default) =>
         {
-            var command = request.Adapt<DecreaseStockCommand>();
-            var result = await mediator.Send(command, cancellationToken);
+            logger.LogInformation("[REQUEST] CorrelationId: {CorrelationId}, Request: {@Request}", context.TraceIdentifier, request);
+
+            var result = await mediator.Send(new DecreaseStockCommand(request), cancellationToken);
             
+            logger.LogInformation("[RESPONSE] CorrelationId: {CorrelationId}, Response: {@Response}", context.TraceIdentifier, result);
+
             return Results.Ok(result.IsSuccess);
         });
     }

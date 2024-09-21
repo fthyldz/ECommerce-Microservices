@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using Notifications.Business.Abstractions.Services;
+using Notifications.Business.Services.Abstractions;
 using Notifications.Business.Services;
 
 namespace Notifications.Business;

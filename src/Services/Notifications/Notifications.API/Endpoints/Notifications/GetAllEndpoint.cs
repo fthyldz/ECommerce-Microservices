@@ -1,5 +1,5 @@
 using Carter;
-using Notifications.Business.Abstractions.Services;
+using Notifications.Business.Services.Abstractions;
 
 namespace Notifications.API.Endpoints.Notifications;
 

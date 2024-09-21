@@ -10,10 +10,14 @@ public class CreateOrderEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("/orders", async ([FromBody] OrderDto request, IMediator mediator, CancellationToken cancellationToken = default) =>
+        app.MapPost("/orders", async ([FromBody] OrderDto request, IMediator mediator, HttpContext context, ILogger<CreateOrderEndpoint> logger, CancellationToken cancellationToken = default) =>
         {
-            var command = new CreateOrderCommand(request);
-            var result = await mediator.Send(command, cancellationToken);
+            logger.LogInformation("[REQUEST] CorrelationId: {CorrelationId}, Request: {@Request}", context.TraceIdentifier, request);
+
+            var result = await mediator.Send(new CreateOrderCommand(request), cancellationToken);
+
+            logger.LogInformation("[RESPONSE] CorrelationId: {CorrelationId}, Response: {@Response}", context.TraceIdentifier, result);
+
             return Results.Ok(result.IsSuccess);
         });
     }

@@ -1,4 +1,4 @@
-using Catalog.Domain.Primitives;
+using ECommerce.Domain.Primitives;
 
 namespace Catalog.Domain.Entities;
 

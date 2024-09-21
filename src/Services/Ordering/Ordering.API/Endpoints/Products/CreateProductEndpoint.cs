@@ -10,11 +10,13 @@ public class CreateProductEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("/products", async ([FromBody] CreateProductDto request, IMediator mediator, ILogger<CreateProductEndpoint> logger, CancellationToken cancellationToken = default) =>
+        app.MapPost("/products", async ([FromBody] CreateProductDto request, IMediator mediator, HttpContext context, ILogger<CreateProductEndpoint> logger, CancellationToken cancellationToken = default) =>
         {
-            logger.LogInformation("[START] ProductId: {ProductId}, CorrelationId: {CorrelationId}, ClassType: {ClassType}", request.ProductId, request.CorrelationId, nameof(CreateProductEndpoint));
+            logger.LogInformation("[REQUEST] CorrelationId: {CorrelationId}, Request: {@Request}", context.TraceIdentifier, request);
+            
             var result = await mediator.Send(new CreateProductCommand(request), cancellationToken);
-            logger.LogInformation("[END] ProductId: {ProductId}, CorrelationId: {CorrelationId}, ClassType: {ClassType}", request.ProductId, request.CorrelationId, nameof(CreateProductEndpoint));
+            
+            logger.LogInformation("[RESPONSE] CorrelationId: {CorrelationId}, Response: {@Response}", context.TraceIdentifier, result);
             return Results.Ok(result.IsSuccess);
         });
     }

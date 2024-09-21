@@ -1,6 +1,6 @@
+using ECommerce.Application.Exceptions;
 using MediatR;
 using Ordering.Application.Abstractions.Persistence.Common;
-using Ordering.Application.Exceptions;
 using Ordering.Application.Orders.Dtos;
 using Ordering.Domain.Entities;
 
@@ -10,13 +10,13 @@ public record CreateOrderCommand(OrderDto OrderDto) : IRequest<CreateOrderComman
 
 public record CreateOrderCommandResult(bool IsSuccess);
 
-public class CreateOrderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateOrderCommand, CreateOrderCommandResult>
+public class CreateOrderCommandHandler(IOrderingUnitOfWork unitOfWork) : IRequestHandler<CreateOrderCommand, CreateOrderCommandResult>
 {
     public async Task<CreateOrderCommandResult> Handle(CreateOrderCommand command, CancellationToken cancellationToken)
     {
         var order = Order.Create(Guid.NewGuid(), command.OrderDto.CustomerName, command.OrderDto.Address);
         
-        unitOfWork.Orders.Add(order);
+        order = await unitOfWork.Orders.AddAsync(order, cancellationToken);
         
         var products = await unitOfWork.Products.GetProductByIdsAsync(command.OrderDto.OrderItems.Select(x => x.ProductId).ToArray(), cancellationToken);
         

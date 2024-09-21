@@ -7,15 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="FluentValidation" Version="11.10.0" />
-      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
-      <PackageReference Include="Mapster" Version="7.4.0" />
       <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.5" />
-      <PackageReference Include="MediatR" Version="12.4.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\MessageBus\ECommerce.MessageBus\ECommerce.MessageBus.csproj" />
+      <ProjectReference Include="..\..\..\Common\ECommerce.Application\ECommerce.Application.csproj" />
+      <ProjectReference Include="..\..\..\MessageBus\ECommerce.MessageContracts\ECommerce.MessageContracts.csproj" />
       <ProjectReference Include="..\Catalog.Domain\Catalog.Domain.csproj" />
     </ItemGroup>
 

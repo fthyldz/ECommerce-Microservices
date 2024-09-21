@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\..\MessageBus\ECommerce.Consumer\ECommerce.Consumer.csproj" />
+      <ProjectReference Include="..\..\..\..\..\MessageBus\ECommerce.MessageContracts\ECommerce.MessageContracts.csproj" />
+    </ItemGroup>
+
+</Project>

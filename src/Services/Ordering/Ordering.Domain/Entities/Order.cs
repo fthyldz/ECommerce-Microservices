@@ -1,5 +1,5 @@
-using Ordering.Domain.Events.DomainEvents;
-using Ordering.Domain.Primitives;
+using Ordering.Domain.Events;
+using ECommerce.Domain.Primitives;
 
 namespace Ordering.Domain.Entities;
 
@@ -28,7 +28,7 @@ public class Order : Aggregate
             Address = address
         };
 
-        order.AddDomainEvent(new OrderCreatedEvent(order));
+        order.AddDomainEvent(new OrderCreatedDomainEvent(order));
 
         return order;
     }

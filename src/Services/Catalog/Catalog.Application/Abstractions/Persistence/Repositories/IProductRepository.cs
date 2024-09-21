@@ -1,4 +1,4 @@
-using Catalog.Application.Abstractions.Persistence.Common;
+using ECommerce.Application.Abstractions.Persistence.Common;
 using Catalog.Domain.Entities;
 
 namespace Catalog.Application.Abstractions.Persistence.Repositories;

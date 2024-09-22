@@ -1,6 +1,6 @@
 # E-Ticaret Platformu için Microservice Mimarisi
 
-Bu proje, RabbitMQ ve PostgreSQL kullanarak .NET Core ile geliştirilmiş bir e-ticaret platformu için temel bir microservice mimarisini göstermektedir. Her proje, ayrı ayrı geliştirilmiş olup, bağımlılıkların daha iyi yönetilebilmesi için ortak class library projelerinde toplanabilir. Ayrıca, microservislerin izlenebilirliğini ve performans takibini sağlamak için **Jaeger** ile dağıtık izleme (tracing) entegrasyonu yapılabilir.
+Bu proje, RabbitMQ ve PostgreSQL kullanarak .NET Core ile geliştirilmiş bir e-ticaret platformu için temel bir microservice mimarisini göstermektedir.
 
 ## İçindekiler
 - [Proje Tanımı](#proje-tanımı)
